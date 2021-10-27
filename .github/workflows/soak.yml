@@ -9,22 +9,21 @@ jobs:
       matrix:
         target:
           - datadog_agent_remap_datadog_logs
-          - syslog_humio_logs
-          - syslog_log2metric_humio_metrics
-          - syslog_loki
-          - syslog_regex_logs2metric_ddmetrics
-          - syslog_splunk_hec_logs
+          # - syslog_humio_logs
+          # - syslog_log2metric_humio_metrics
+          # - syslog_loki
+          # - syslog_regex_logs2metric_ddmetrics
+          # - syslog_splunk_hec_logs
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-      - uses: opsgang/ga-setup-minikube@v0.1.1
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.4.2
         with:
-          minikube-version: 1.4.0
-          k8s-version: 1.15.1
-      - name: Testing
-        run: |
-          minikube config set vm-driver docker
-          minikube start --cpus=7 --memory=8g
-          minikube update-context
-          kubectl cluster-info
-          kubectl get pods -n kube-system
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+          github token: ${{ secrets.GITHUB_TOKEN }}
+          driver: docker
+          start args: "--cpus=7 --memory=8g"
+      - name: Interact with the cluster
+        run: kubectl get nodes
