@@ -4,7 +4,9 @@ on: push
 
 jobs:
   soak:
-    runs-on: ubuntu-20.04
+    name: Run 'soak' (${{ matrix.target }})
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: [self-hosted, linux, x64, soak]
     strategy:
       matrix:
         target:
@@ -17,13 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.4.2
-        with:
-          minikube version: 'v1.23.2'
-          kubernetes version: 'v1.19.2'
-          github token: ${{ secrets.GITHUB_TOKEN }}
-          driver: docker
-          start args: "--cpus=7 --memory=8g"
       - name: Interact with the cluster
-        run: kubectl get nodes
+        run: |
+          minikube stop || true
+          minikube delete || true
+          minikube start --cpus=7 --memory=8g
