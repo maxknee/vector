@@ -13,18 +13,17 @@ jobs:
       matrix:
         target:
           - datadog_agent_remap_datadog_logs
-          - syslog_humio_logs
-          - syslog_log2metric_humio_metrics
-          - syslog_loki
-          - syslog_regex_logs2metric_ddmetrics
-          - syslog_splunk_hec_logs
+          # - syslog_humio_logs
+          # - syslog_log2metric_humio_metrics
+          # - syslog_loki
+          # - syslog_regex_logs2metric_ddmetrics
+          # - syslog_splunk_hec_logs
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
 
       - name: Compute image tag
         run: |
-          . "
           echo "::set-output name=TAG::$(soaks/bin/container_tag.sh ${{ matrix.target }} ${{ github.sha }})"
         id: image_tag
 
