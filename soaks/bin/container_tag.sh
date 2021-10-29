@@ -21,7 +21,10 @@ fi
 SOAK_NAME="${1:-}"
 COMMIT_SHA="${2:-}"
 
-TAG=$("${SOAK_ROOT}/bin/container_tag.sh" "${SOAK_NAME}" "${COMMIT_SHA}")
-IMAGE="vector:${TAG}"
+# shellcheck source=/dev/null
+. "${SOAK_ROOT}/${SOAK_NAME}/FEATURES"
 
-echo "${IMAGE}"
+FEATURE_SHA=$(echo -n "${FEATURES}" | sha256sum - | head -c40)
+TAG="${COMMIT_SHA}-${FEATURE_SHA}"
+
+echo "${TAG}"

@@ -35,7 +35,7 @@ echo "Captures will be recorded into ${capture_dir}"
 #
 # BASELINE
 #
-./bin/boot_minikube.sh "${BASELINE_IMAGE}"
+./bin/boot_minikube.sh
 minikube mount "${capture_dir}:/captures" &
 MOUNT_PID=$!
 
